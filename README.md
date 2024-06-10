@@ -1,18 +1,39 @@
 # Tattletale
 A Program To Tell Dom/mes When Their Subs Do Stuff On Chaster
-# Cloudflare worker example app
 
-awwbot is an example app that brings the cuteness of `r/aww` straight to your Discord server, hosted on Cloudflare workers. Cloudflare Workers are a convenient way to host Discord bots due to the free tier, simple development model, and automatically managed environment (no VMs!).
+# Architecture
+Host web worker in cloudflare infra for recieving webhhoks and sending discord messages
 
-The tutorial for building awwbot is [in the developer documentation](https://discord.com/developers/docs/tutorials/hosting-on-cloudflare-workers)
+Host html pages needed to get chaster extension working with cloudflare pages
+- Main page
+- Configuration page
 
-![awwbot in action](https://user-images.githubusercontent.com/534619/157503404-a6c79d1b-f0d0-40c2-93cb-164f9df7c138.gif)
+Register chaster webhook (https://docs.chaster.app/api/extensions-api/create-your-extension/webhooks)
+- Sends request to cloudflare worker
+- If event payload does not contain all needed info query history endpoint to see if there has been a new event not notified of
+    - https://api.chaster.app/api#/Locks/LockController_getLockHistory
+- Cloudflare worker looks up chaster user's discord handle somehow
+    - Register with bot command? 
+    - How to verify identity?
+        - Enter discord handle in extension configuraion?
+        - Metadata on chaster user object?
+- Open DM channel if it does not already exist (channels can live for a long time it seems?)
+    - https://www.postman.com/discord-api/workspace/discord-api/request/23484324-049e3518-96a5-4412-aa76-ec8c2cd17beb
+    - https://discord.com/developers/docs/resources/user#create-dm
+
+- Send notification in DM channel
+    - https://www.postman.com/discord-api/workspace/discord-api/request/23484324-eaf41e8b-35b4-4de9-95a8-df59a535d843
+    - https://discord.com/developers/docs/resources/channel#create-message
+
+## Open questions
+Use discord User-Installable App? Maybe if we can only message "friends" this will work without being added to the server.
+
 
 ## Resources used
 
 - [Discord Interactions API](https://discord.com/developers/docs/interactions/receiving-and-responding)
 - [Cloudflare Workers](https://workers.cloudflare.com/) for hosting
-- [Reddit API](https://www.reddit.com/dev/api/) to send messages back to the user
+- [Chaster API](https://docs.chaster.app/api/basics/introduction) to recieve notifications on behalf of the user
 
 ---
 
@@ -24,7 +45,7 @@ Below is a basic overview of the project structure:
 ├── .github/workflows/ci.yaml -> Github Action configuration
 ├── src
 │   ├── commands.js           -> JSON payloads for commands
-│   ├── reddit.js             -> Interactions with the Reddit API
+│   ├── chaster.js            -> Interactions with the Chaster API
 │   ├── register.js           -> Sets up commands with the Discord API
 │   ├── server.js             -> Discord app logic and routing
 ├── test

@@ -7,7 +7,7 @@
 export async function getCuteUrl() {
   const response = await fetch(redditUrl, {
     headers: {
-      'User-Agent': 'justinbeckwith:awwbot:v1.0.0 (by /u/justinblat)',
+      'User-Agent': 'justinbeckwith:Tattletale:v1.0.0 (by /u/justinblat)',
     },
   });
   if (!response.ok) {
