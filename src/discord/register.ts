@@ -1,5 +1,7 @@
+/// <reference types="node" />
+
 import { AWW_COMMAND, INVITE_COMMAND } from './commands.js';
-import dotenv from 'dotenv';
+import * as dotenv from 'dotenv';
 import process from 'node:process';
 
 /**

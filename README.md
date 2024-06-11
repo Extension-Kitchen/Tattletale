@@ -42,21 +42,37 @@ Use discord User-Installable App? Maybe if we can only message "friends" this wi
 Below is a basic overview of the project structure:
 
 ```
-├── .github/workflows/ci.yaml -> Github Action configuration
-├── src
-│   ├── commands.js           -> JSON payloads for commands
-│   ├── chaster.js            -> Interactions with the Chaster API
-│   ├── register.js           -> Sets up commands with the Discord API
-│   ├── server.js             -> Discord app logic and routing
+├── .github/workflows/ci.yaml     -> Github Action configuration
+├── public                        -> HTTP resources hosted by cloudflare pages
+│   └── chaster                   
+│       ├── configuration.html    -> GET  ${host}/chaster/configuration (chaster extension configuration page)
+│       └── main.html             -> GET  ${host}/chaster/main          (chaster extension main page)
+├── functions                     -> HTTP endpoints hosted by cloudflare pages functions
+│   └── api                       
+│       ├── chaster                
+│       │   └── event.ts          -> POST ${host}/api/chaster/events
+│       ├── discord               
+│       │   └── index.ts          -> GET  ${host}/api/discord (recieves and dispatches Discord events/commands)
+│       └── index.ts              -> GET  ${host}/api
+├── src                           -> TypeScript modules that can be imported into the functions/api
+│   ├── discord
+│   │   ├── commands.ts           -> JSON payloads for commands
+│   │   ├── common.ts             -> Assorted discord "stuff" (TODO: sort somewhere)
+│   │   ├── messaging.ts          -> Interactions with the Discord API needed for sending DM's
+│   │   └── register.ts           -> Sets up commands with the Discord API
+│   └── env.ts
 ├── test
-|   ├── test.js               -> Tests for app
-├── wrangler.toml             -> Configuration for Cloudflare workers
+│   └── server.test.js            -> Tests for app
+├── wrangler.toml                 -> Configuration for Cloudflare workers
+├── package-lock.json
 ├── package.json
+├── LICENSE
 ├── README.md
-├── .eslintrc.json
-├── .prettierignore
-├── .prettierrc.json
-└── .gitignore
+├── eslint.config.js
+├── example.dev.vars
+├── flake.lock
+├── flake.nix
+└── tsconfig.json
 ```
 
 ## Configuring project
@@ -166,3 +182,6 @@ $ wrangler secret put DISCORD_APPLICATION_ID
 ## Questions?
 
 Feel free to post an issue here, or reach out to [@justinbeckwith](https://twitter.com/JustinBeckwith)!
+
+# Credits
+Project skeleton based on https://github.com/discord/cloudflare-sample-app by Justin Beckwith

@@ -1,13 +1,13 @@
 {
-  "name": "Tattletale",
+  "name": "tattletale",
   "version": "1.0.0",
-  "description": "A simple discord bot that uses intents to post pictures from r/aww",
+  "description": "A simple discord bot & chaster extension that forwards chaster lock events to users discord DM's",
   "type": "module",
   "private": true,
   "main": "src/server.js",
   "scripts": {
-    "start": "wrangler dev",
-    "ngrok": "ngrok http 8787",
+    "start": "wrangler pages dev",
+    "ngrok": "ngrok http 8788",
     "test": "c8 mocha test",
     "fix": "eslint --fix '**/*.js'",
     "lint": "eslint '**/*.js'",
@@ -15,13 +15,13 @@
     "publish": "wrangler deploy"
   },
   "keywords": [],
-  "author": "Justin Beckwith <justin.beckwith@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "discord-interactions": "^3.4.0",
-    "itty-router": "^5.0.9"
+    "discord-interactions": "^3.4.0"
   },
   "devDependencies": {
+    "@types/node": "^20.14.2",
+    "@cloudflare/workers-types": "^4.0.0",
     "@eslint/js": "^9.1.1",
     "c8": "^9.0.0",
     "chai": "^5.0.0",
@@ -34,6 +34,6 @@
     "ngrok": "^5.0.0-beta.2",
     "prettier": "^3.2.5",
     "sinon": "^18.0.0",
-    "wrangler": "^3.0.1"
+    "wrangler": "^3.48.1"
   }
 }
