@@ -29,3 +29,5 @@ jobs:
         node-version: 20.x
     - run: npm ci
     - run: npm run register
+      env:
+        DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
