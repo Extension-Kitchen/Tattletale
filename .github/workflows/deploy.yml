@@ -14,7 +14,7 @@ jobs:
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
         with:
-          wranglerVersion: 3.48.1
+          wranglerVersion: ^3.48.1
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: 681adc80e343a1343ec561b3b7b881ff
           command: pages deploy public
