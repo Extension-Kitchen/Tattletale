@@ -7,5 +7,5 @@
  - Change env vars
  - run npx wrangler pages deploy public
  - Create CLOUDFLARE_API_TOKEN
- - Set CLOUDFLARE_API_TOKEN, DISCORD_TOKEN in github CI/CD variables and set account id in .github/workflows/deploy.yml
+ - Set CLOUDFLARE_API_TOKEN, DISCORD_TOKEN in github CI/CD variables and set account id and discord application id in .github/workflows/deploy.yml
  - Commit
