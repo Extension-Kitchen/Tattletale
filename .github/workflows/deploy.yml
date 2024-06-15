@@ -31,4 +31,4 @@ jobs:
     - run: npm run register
       env:
         DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
-        DISCORD_APPLICATION_ID: 1250200555113025737
+        DISCORD_APPLICATION_ID: "1250200555113025737"
