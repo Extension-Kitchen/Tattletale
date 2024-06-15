@@ -1,35 +1,25 @@
 import { Env } from "../env";
-import { baseApiUrl } from "./client";
+import { useClient } from "./client";
 
 export async function sendDm(env: Env, userSnowflake: string, message: string) {
-  const channelRequest = await fetch(`${baseApiUrl}/users/@me/channels`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      Authorization: `Bot ${env.DISCORD_TOKEN}`,
-    },
-    body: JSON.stringify({
+  const client = useClient(env);
+
+  const channel = await client.POST("/users/@me/channels", {
+    body: {
       recipient_id: userSnowflake,
-    }),
+    },
   });
 
-  const channel = await channelRequest.json();
-
-  const dmRequest = await fetch(
-    `${baseApiUrl}/channels/${channel["id"]}/messages`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization: `Bot ${env.DISCORD_TOKEN}`,
+  const dmRequest = await client.POST("/channels/{channel_id}/messages", {
+    params: {
+      path: {
+        channel_id: channel.data.id,
       },
-      body: JSON.stringify({
-        content: message,
-      }),
     },
-  );
+    body: {
+      content: message,
+    },
+  });
 
-  return await dmRequest.json();
+  return dmRequest;
 }

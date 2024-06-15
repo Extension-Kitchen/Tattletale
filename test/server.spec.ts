@@ -83,6 +83,7 @@ describe("Server", () => {
         .intercept({
           method: "POST",
           body: (b) => JSON.parse(b)["recipient_id"] === snowflake,
+          headers: (headers) => headers["authorization"].startsWith("Bot "),
           path: baseApiPath + "/users/@me/channels",
         })
         .reply(200, { id: channelId });
@@ -91,6 +92,7 @@ describe("Server", () => {
         .get(baseApiHost)
         .intercept({
           method: "POST",
+          headers: (headers) => headers["authorization"].startsWith("Bot "),
           path: baseApiPath + `/channels/${channelId}/messages`,
         })
         .reply(200, {});

@@ -1,6 +1,20 @@
 import { verifyKey } from "discord-interactions";
 import { Env } from "../env";
 
+// type VerifiedInteraction =
+//   | {
+//       interaction:
+//         | components["schemas"]["PongInteractionCallbackRequest"]
+//         | components["schemas"]["ApplicationCommandSubcommandGroupOption"]
+//         | components["schemas"]["MessageComponentStringSelectResponse"];
+
+//       isValid: true;
+//     }
+//   | {
+//       interaction: undefined;
+//       isValid: false;
+//     };
+
 export async function verifyDiscordRequest({
   request,
   env,
@@ -13,7 +27,7 @@ export async function verifyDiscordRequest({
     timestamp &&
     verifyKey(body, signature, timestamp, env.DISCORD_PUBLIC_KEY);
   if (!isValidRequest) {
-    return { isValid: false };
+    return { isValid: false, interaction: undefined };
   }
 
   return { interaction: JSON.parse(body), isValid: true };

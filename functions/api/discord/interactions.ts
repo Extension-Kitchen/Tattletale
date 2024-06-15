@@ -1,5 +1,5 @@
 /**
- * The core server that runs on a Cloudflare worker.
+ * The discord interactions endpoint
  */
 
 import { InteractionResponseType, InteractionType } from "discord-interactions";
