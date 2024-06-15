@@ -6,5 +6,6 @@
  - run npx wrangler secret DISCORD_TOKEN (not working?)
  - Change env vars
  - run npx wrangler pages deploy public
- - Set CLOUDFLARE_API_TOKEN in github CI/CD variables and set account id in .github/workflows/deploy.yml
+ - Create CLOUDFLARE_API_TOKEN
+ - Set CLOUDFLARE_API_TOKEN, DISCORD_TOKEN in github CI/CD variables and set account id in .github/workflows/deploy.yml
  - Commit
