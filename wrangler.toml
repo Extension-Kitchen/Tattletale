@@ -2,7 +2,7 @@ name = "tattletale"
 pages_build_output_dir = "./public"
 compatibility_date = "2024-06-05"
 
-# [secrets]
-# DISCORD_TOKEN
-# DISCORD_PUBLIC_KEY
-# DISCORD_APPLICATION_ID
+[vars]
+DISCORD_APPLICATION_ID = "1250200555113025737"
+DISCORD_PUBLIC_KEY = "c4e285b6137255eecae7b02241f4d89c2ba470476729c9cd9aac8623942ce234"
+CHASTER_CLIENT_ID = "tattletale-711656"

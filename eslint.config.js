@@ -6,6 +6,9 @@ import tseslint from "typescript-eslint";
 
 export default tseslint.config(
   {
+    ignores: ["dist-functions", ".direnv", ".wrangler", "src/*/api.d.ts"],
+  },
+  {
     rules: {
       "@typescript-eslint/no-unused-vars": [
         "error",
@@ -20,9 +23,6 @@ export default tseslint.config(
         },
       ],
     },
-  },
-  {
-    ignores: ["dist-functions", ".direnv"],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,

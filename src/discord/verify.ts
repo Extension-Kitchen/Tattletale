@@ -1,10 +1,6 @@
 import { verifyKey } from "discord-interactions";
 import { Env } from "../env";
 
-export const baseApiHost = "https://discord.com";
-export const baseApiPath = "/api/v10";
-export const baseApiUrl = `${baseApiHost}${baseApiPath}`;
-
 export async function verifyDiscordRequest({
   request,
   env,

@@ -1,5 +1,5 @@
 import { Env } from "../env";
-import { baseApiUrl } from "./common";
+import { baseApiUrl } from "./client";
 
 export async function sendDm(env: Env, userSnowflake: string, message: string) {
   const channelRequest = await fetch(`${baseApiUrl}/users/@me/channels`, {
@@ -31,5 +31,5 @@ export async function sendDm(env: Env, userSnowflake: string, message: string) {
     },
   );
 
-  const _ = await dmRequest.json();
+  return await dmRequest.json();
 }

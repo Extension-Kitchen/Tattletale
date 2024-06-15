@@ -6,7 +6,7 @@ import {
   InteractionType,
   InteractionResponseFlags,
 } from "discord-interactions";
-import { INVITE_COMMAND } from "../src/discord/commands";
+import { INVITE_COMMAND } from "@src/discord/commands";
 import { SELF, fetchMock } from "cloudflare:test";
 import {
   describe,
@@ -17,12 +17,13 @@ import {
   afterEach,
   beforeEach,
 } from "vitest";
-import * as discordCommon from "@src/discord/common";
+import { baseApiHost, baseApiPath } from "@src/discord/client";
+import * as discordVerifyMod from "@src/discord/verify";
 
 // To make hot reloading work
-import * as _ from "@src/discord/common";
+import * as _ from "../dist-functions";
 
-vi.mock("../src/discord/common");
+vi.mock("@src/discord/verify");
 
 beforeAll(() => {
   // Enable outbound request mocking...
@@ -55,16 +56,19 @@ describe("Server", () => {
         type: InteractionType.PING,
       };
 
-      vi.mocked(discordCommon.verifyDiscordRequest).mockReturnValue(
+      vi.mocked(discordVerifyMod.verifyDiscordRequest).mockReturnValue(
         Promise.resolve({
           isValid: true,
           interaction: interaction,
         }),
       );
 
-      const response = await SELF.fetch("https://example.com/api/discord", {
-        method: "POST",
-      });
+      const response = await SELF.fetch(
+        "https://example.com/api/discord/interactions",
+        {
+          method: "POST",
+        },
+      );
       const body = await response.json();
       expect(body["type"]).to.equal(InteractionResponseType.PONG);
     });
@@ -75,19 +79,19 @@ describe("Server", () => {
 
       // mock the fetch calls to discord
       fetchMock
-        .get(discordCommon.baseApiHost)
+        .get(baseApiHost)
         .intercept({
           method: "POST",
           body: (b) => JSON.parse(b)["recipient_id"] === snowflake,
-          path: discordCommon.baseApiPath + "/users/@me/channels",
+          path: baseApiPath + "/users/@me/channels",
         })
         .reply(200, { id: channelId });
 
       fetchMock
-        .get(discordCommon.baseApiHost)
+        .get(baseApiHost)
         .intercept({
           method: "POST",
-          path: discordCommon.baseApiPath + `/channels/${channelId}/messages`,
+          path: baseApiPath + `/channels/${channelId}/messages`,
         })
         .reply(200, {});
 
@@ -95,7 +99,10 @@ describe("Server", () => {
         "https://example.com/api/chaster/event",
         {
           method: "POST",
-          body: JSON.stringify({ discordId: snowflake }),
+          body: JSON.stringify({
+            event: "action_log.created",
+            data: { actionLog: { user: { discordId: snowflake } } },
+          }),
         },
       );
 
@@ -110,16 +117,19 @@ describe("Server", () => {
         },
       };
 
-      vi.mocked(discordCommon.verifyDiscordRequest).mockReturnValue(
+      vi.mocked(discordVerifyMod.verifyDiscordRequest).mockReturnValue(
         Promise.resolve({
           isValid: true,
           interaction: interaction,
         }),
       );
 
-      const response = await SELF.fetch("https://example.com/api/discord", {
-        method: "POST",
-      });
+      const response = await SELF.fetch(
+        "https://example.com/api/discord/interactions",
+        {
+          method: "POST",
+        },
+      );
       const body = await response.json();
       expect(body["type"]).to.equal(
         InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -136,18 +146,21 @@ describe("Server", () => {
         },
       };
 
-      vi.mocked(discordCommon.verifyDiscordRequest).mockReturnValue(
+      vi.mocked(discordVerifyMod.verifyDiscordRequest).mockReturnValue(
         Promise.resolve({
           isValid: true,
           interaction: interaction,
         }),
       );
 
-      const response = await SELF.fetch("https://example.com/api/discord", {
-        method: "POST",
-      });
+      const response = await SELF.fetch(
+        "https://example.com/api/discord/interactions",
+        {
+          method: "POST",
+        },
+      );
       expect(
-        vi.mocked(discordCommon.verifyDiscordRequest).mock.calls.length,
+        vi.mocked(discordVerifyMod.verifyDiscordRequest).mock.calls.length,
       ).to.equal(1);
       const body = await response.json();
       expect(response.status).to.equal(400);

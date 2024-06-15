@@ -6,7 +6,7 @@ import { InteractionResponseType, InteractionType } from "discord-interactions";
 import { INVITE_COMMAND } from "@src/discord/commands";
 import { InteractionResponseFlags } from "discord-interactions";
 import { Env } from "@src/env";
-import { verifyDiscordRequest } from "@src/discord/common";
+import { verifyDiscordRequest } from "@src/discord/verify";
 
 class JsonResponse extends Response {
   constructor(body: unknown, init?: ResponseInit) {

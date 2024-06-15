@@ -1,0 +1,10 @@
+ - Fork?
+ - Create chaster bot
+ - Create discord bot
+ - Get ID's and secrets
+ - run npx wrangler secret CHASTER_CLIENT_SECRET (not working?)
+ - run npx wrangler secret DISCORD_TOKEN (not working?)
+ - Change env vars
+ - run npx wrangler pages deploy public
+ - Set CLOUDFLARE_API_TOKEN in github CI/CD variables and set account id in .github/workflows/deploy.yml
+ - Commit

@@ -1,6 +1,6 @@
 /// <reference types="node" />
 
-import { INVITE_COMMAND } from "./commands.js";
+import { INVITE_COMMAND } from "./commands";
 import * as dotenv from "dotenv";
 import process from "node:process";
 
