@@ -31,7 +31,7 @@
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "^0.4.4",
     "@cloudflare/workers-types": "^4.0.0",
-    "@eslint/js": "^9.4.0",
+    "@eslint/js": "^9.5.0",
     "@types/eslint__js": "^8.42.3",
     "@types/node": "^20.14.2",
     "deno-bin": "^1.44.2",
