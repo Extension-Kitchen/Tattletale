@@ -4,4 +4,5 @@ export interface Env {
   DISCORD_TOKEN: string;
   CHASTER_CLIENT_ID: string;
   CHASTER_CLIENT_SECRET: string;
+  CHASTER_TOKEN: string;
 }

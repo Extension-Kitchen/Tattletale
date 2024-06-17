@@ -1,6 +1,7 @@
 import { sendDm } from "@src/discord/messaging";
 import { components } from "@src/chaster/api";
 import { Env } from "@src/env";
+import { useClient } from "@src/chaster/client";
 
 type WebhookPayload = components["schemas"]["WebhookEventForPublic"]["payload"];
 type WebhookPayloadDataMap = {
@@ -10,29 +11,57 @@ type WebhookPayloadDataMap = {
   >["data"];
 };
 
+async function lockEvent(
+  env: Env,
+  lock: components["schemas"]["LockForPublic"],
+  message: string,
+) {
+  const userDiscordSnowflake = lock.user.discordId;
+  const khDiscordSnowflake = lock.keyholder.discordId;
+
+  await Promise.all([
+    sendDm(env, khDiscordSnowflake, message),
+    sendDm(env, userDiscordSnowflake, message),
+  ]);
+}
+
 async function actionLogEvent(
   env: Env,
   data: WebhookPayloadDataMap["action_log.created"],
 ) {
-  // TODO: This sends the discord message to the user who _triggered_ the event
-  // we should aim to send the message to the keyholder instead (+ maybe the lockee)
-  await sendDm(env, data.actionLog.user?.discordId, JSON.stringify(data));
+  const client = useClient(env);
+
+  const session = await client.GET("/api/extensions/sessions/{sessionId}", {
+    params: {
+      path: {
+        sessionId: data.sessionId,
+      },
+    },
+  });
+
+  await lockEvent(env, session.data?.session.lock, JSON.stringify(data));
 }
 
 async function sessionCreatedEvent(
-  _env: Env,
-  _data: WebhookPayloadDataMap["extension_session.created"],
-) {}
+  env: Env,
+  data: WebhookPayloadDataMap["extension_session.created"],
+) {
+  await lockEvent(env, data.session.lock, JSON.stringify(data));
+}
 
 async function sessionUpdatedEvent(
-  _env: Env,
-  _data: WebhookPayloadDataMap["extension_session.updated"],
-) {}
+  env: Env,
+  data: WebhookPayloadDataMap["extension_session.updated"],
+) {
+  await lockEvent(env, data.session.lock, JSON.stringify(data));
+}
 
 async function sessionDeletedEvent(
-  _env: Env,
-  _data: WebhookPayloadDataMap["extension_session.deleted"],
-) {}
+  env: Env,
+  data: WebhookPayloadDataMap["extension_session.deleted"],
+) {
+  await lockEvent(env, data.session.lock, JSON.stringify(data));
+}
 
 export const onRequestPost: PagesFunction<Env> = async (context) => {
   const data: WebhookPayload = await context.request.json();

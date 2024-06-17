@@ -8,7 +8,7 @@ export const baseApiUrl = `${baseApiHost}${baseApiPath}`;
 
 let client = null;
 
-export function useClient(env: Env) {
+export function useClient(env: Env): ReturnType<typeof createClient<paths>> {
   if (client === null) {
     const auth: Middleware = {
       async onRequest(req) {

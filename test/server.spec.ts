@@ -17,7 +17,11 @@ import {
   afterEach,
   beforeEach,
 } from "vitest";
-import { baseApiHost, baseApiPath } from "@src/discord/client";
+import {
+  baseApiHost as discordBaseApiHost,
+  baseApiPath as discordBaseApiPath,
+} from "@src/discord/client";
+import { baseApiUrl as chasterBaseApiHost } from "@src/chaster/client";
 import * as discordVerifyMod from "@src/discord/verify";
 
 // To make hot reloading work
@@ -76,26 +80,46 @@ describe("Server", () => {
     it("should handle a lock event", async () => {
       const channelId = 0;
       const snowflake = 1243;
+      const sessionId = 143;
+
+      // mock the fetch calls to chaster
+      fetchMock
+        .get(chasterBaseApiHost)
+        .intercept({
+          method: "GET",
+          headers: (headers) => headers["authorization"].startsWith("Bearer "),
+          path: `/api/extensions/sessions/${sessionId}`,
+        })
+        .reply(200, {
+          session: {
+            lock: {
+              user: { discordId: snowflake },
+              keyholder: { discordId: snowflake },
+            },
+          },
+        });
 
       // mock the fetch calls to discord
-      fetchMock
-        .get(baseApiHost)
-        .intercept({
-          method: "POST",
-          body: (b) => JSON.parse(b)["recipient_id"] === snowflake,
-          headers: (headers) => headers["authorization"].startsWith("Bot "),
-          path: baseApiPath + "/users/@me/channels",
-        })
-        .reply(200, { id: channelId });
+      for (const _ of [0, 1]) {
+        fetchMock
+          .get(discordBaseApiHost)
+          .intercept({
+            method: "POST",
+            body: (b) => JSON.parse(b)["recipient_id"] === snowflake,
+            headers: (headers) => headers["authorization"].startsWith("Bot "),
+            path: discordBaseApiPath + "/users/@me/channels",
+          })
+          .reply(200, { id: channelId });
 
-      fetchMock
-        .get(baseApiHost)
-        .intercept({
-          method: "POST",
-          headers: (headers) => headers["authorization"].startsWith("Bot "),
-          path: baseApiPath + `/channels/${channelId}/messages`,
-        })
-        .reply(200, {});
+        fetchMock
+          .get(discordBaseApiHost)
+          .intercept({
+            method: "POST",
+            headers: (headers) => headers["authorization"].startsWith("Bot "),
+            path: discordBaseApiPath + `/channels/${channelId}/messages`,
+          })
+          .reply(200, {});
+      }
 
       const response = await SELF.fetch(
         "https://example.com/api/chaster/event",
@@ -103,7 +127,7 @@ describe("Server", () => {
           method: "POST",
           body: JSON.stringify({
             event: "action_log.created",
-            data: { actionLog: { user: { discordId: snowflake } } },
+            data: { sessionId: sessionId },
           }),
         },
       );
