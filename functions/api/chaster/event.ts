@@ -16,12 +16,16 @@ async function lockEvent(
   lock: components["schemas"]["LockForPublic"],
   message: string,
 ) {
-  const userDiscordSnowflake = lock.user.discordId;
-  const khDiscordSnowflake = lock.keyholder.discordId;
+  const userDiscordSnowflake = lock.user?.discordId;
+  const khDiscordSnowflake = lock.keyholder?.discordId;
 
   await Promise.all([
-    sendDm(env, khDiscordSnowflake, message),
-    sendDm(env, userDiscordSnowflake, message),
+    khDiscordSnowflake !== undefined
+      ? sendDm(env, khDiscordSnowflake, message)
+      : Promise.resolve(),
+    userDiscordSnowflake !== undefined
+      ? sendDm(env, userDiscordSnowflake, message)
+      : Promise.resolve(),
   ]);
 }
 

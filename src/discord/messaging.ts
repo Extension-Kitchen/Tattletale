@@ -1,7 +1,11 @@
 import { Env } from "../env";
 import { useClient } from "./client";
 
-export async function sendDm(env: Env, userSnowflake: string, message: string) {
+export async function sendDm(
+  env: Env,
+  userSnowflake: string | undefined,
+  message: string,
+) {
   const client = useClient(env);
 
   const channel = await client.POST("/users/@me/channels", {
