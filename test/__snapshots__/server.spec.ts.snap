@@ -1,3 +1,3 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Server > POST / > should handle an invite command interaction 1`] = `"https://discord.com/oauth2/authorize?client_id=1250200555113025737&scope=bot"`;
+exports[`Server > POST / > should handle an invite command interaction 1`] = `"https://discord.com/oauth2/authorize?client_id=1250200555113025737"`;
