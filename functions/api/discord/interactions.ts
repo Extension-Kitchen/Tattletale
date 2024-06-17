@@ -7,6 +7,7 @@ import { INVITE_COMMAND } from "@src/discord/commands";
 import { InteractionResponseFlags } from "discord-interactions";
 import { Env } from "@src/env";
 import { verifyDiscordRequest } from "@src/discord/verify";
+import { inviteUri } from "@src/discord/invite-uri";
 
 class JsonResponse extends Response {
   constructor(body: unknown, init?: ResponseInit) {
@@ -45,12 +46,10 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     // Most user commands will come as `APPLICATION_COMMAND`.
     switch (interaction.data.name.toLowerCase()) {
       case INVITE_COMMAND.name.toLowerCase(): {
-        const applicationId = env.DISCORD_APPLICATION_ID;
-        const INVITE_URL = `https://discord.com/oauth2/authorize?client_id=${applicationId}&scope=applications.commands`;
         return new JsonResponse({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
-            content: INVITE_URL,
+            content: inviteUri(env),
             flags: InteractionResponseFlags.EPHEMERAL,
           },
         });

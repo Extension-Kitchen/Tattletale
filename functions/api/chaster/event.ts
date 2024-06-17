@@ -43,7 +43,9 @@ async function actionLogEvent(
     },
   });
 
-  await lockEvent(env, session.data?.session.lock, JSON.stringify(data));
+  const message = data.actionLog.title;
+
+  await lockEvent(env, session.data?.session.lock, message);
 }
 
 async function sessionCreatedEvent(

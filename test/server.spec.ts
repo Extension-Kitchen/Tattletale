@@ -127,7 +127,7 @@ describe("Server", () => {
           method: "POST",
           body: JSON.stringify({
             event: "action_log.created",
-            data: { sessionId: sessionId },
+            data: { sessionId: sessionId, actionLog: { title: "TEST" } },
           }),
         },
       );

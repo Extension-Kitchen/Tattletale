@@ -1,6 +1,13 @@
 <html>
+	<script type="module">
+		const inviteUri = await fetch("/api/discord/invite-uri").then(r => r.text());
+		
+		const anchor = document.querySelector("#discord-invite-link");
+		anchor.href = inviteUri;
+		anchor.innerHTML = inviteUri;
+	</script>
 	<body>
-		<h1>Hello Pages</h1>
-		<a href="/api/time">Go to /api/time</a>
+		<h1 style="color: #fff;">Discord bot invite link</h1>
+		<a id="discord-invite-link" target="_blank" rel="noopener noreferrer" style="color: #fff;"></a>
 	</body>
 </html>
